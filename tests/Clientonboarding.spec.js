@@ -4,11 +4,11 @@ import { loginpage } from '../pages/login';
 test('clientonboardingtest', async ({ page }) => {
   const login = new loginpage(page)
   login.login('devi', 'pass')
-  login.invite('test', 'regattemptfifteen', 'testregattemptfifteen', 'Sunregsystemfifteen', 'testregattemptfifteen@YOPmail.com')
-  var mailid = 'https://yopmail.com/?testregattemptfifteen';//Change the mail id here
-  var expectedresult_adminname = 'test regattemptfifteen';//Change the adminname/firstname,lastname here
-  var expectedresult_email = 'testregattemptfifteen@YOPmail.com';//Change the email id here
-  var expectedresult_companyname = 'Sunregsystemfifteen';//Change the legal/company name here
+  login.invite('test', 'regattempteighteen', 'testregattempteighteen', 'Sunregsystemeighteen', 'testregattempteighteen@YOPmail.com')
+  var mailid = 'https://yopmail.com/?testregattempteighteen';//Change the mail id here
+  var expectedresult_adminname = 'test regattempteighteen';//Change the adminname/firstname,lastname here
+  var expectedresult_email = 'testregattempteighteen@YOPmail.com';//Change the email id here
+  var expectedresult_companyname = 'Sunregsystemeighteen';//Change the legal/company name here
 
   //Account creation page error messages
   var expectedresult_company_name = 'Please enter your company name.';
@@ -22,6 +22,12 @@ test('clientonboardingtest', async ({ page }) => {
   var expectedresult_company_name2 = 'The legal name should be alphabets';
   var expectedresult_trade_name2 = 'The trade name should be alphabets';
   var expectedresult_employerid2 = 'The employee number should be numbers';
+  var expectedresult_street1 = 'Please enter street 1.';
+  var expectedresult_street2 = '';
+  var expectedresult_city = 'Please enter your city.';
+  var expectedresult_state = 'Please enter state.';
+  var expectedresult_zipcode = 'Please enter your zip.';
+  var expectedresult_phoneno = 'Please enter your phone number.';
   // var expectedresult_invalidpassword = 'Validation Error';
 
   await page.goto('https://qa.cloud.guhroo.co/login');
@@ -32,14 +38,14 @@ test('clientonboardingtest', async ({ page }) => {
   await page.getByRole('link', { name: ' Invite Client' }).click();
 
   // Inviting a client to fill onboard form
-  await page.getByLabel('First Name').click();
-  await page.getByLabel('Last Name').click();
-  await page.getByLabel('Username').click();
-  await page.getByLabel('Email').click();
-  await page.getByLabel('Legal Name').click();
-  // await page.getByLabel('Logo').click();
-  // await page.getByLabel('Logo').setInputFiles('istockphoto-517188688-612x612.jpg');
-  await page.getByRole('button', { name: 'Invite' }).click();
+  // await page.getByLabel('First Name').click();
+  // await page.getByLabel('Last Name').click();
+  // await page.getByLabel('Username').click();
+  // await page.getByLabel('Email').click();
+  // await page.getByLabel('Legal Name').click();
+  // // await page.getByLabel('Logo').click();
+  // // await page.getByLabel('Logo').setInputFiles('istockphoto-517188688-612x612.jpg');
+  // await page.getByRole('button', { name: 'Invite' }).click();
   await page.getByText('LOGOUT').click();
 
   //Opening a invited user mail to check the invite is recieved
@@ -54,44 +60,45 @@ test('clientonboardingtest', async ({ page }) => {
   await expect(page1.locator('#admin')).toBeDisabled();
   const admin_name = page1.locator("#admin");
   var actualresult_adminname = await admin_name.getAttribute("value");
+
+  console.log("To check admin name is disabled or not and to compare the text which is populated", "\n")
+
   if (expectedresult_adminname === actualresult_adminname) {
-    console.log("Expected value of admin name is shown ", actualresult_adminname)
+    console.log("Expected value is shown: ", actualresult_adminname)
   }
   else {
-    console.log("Expected value of admin name is not shown ", actualresult_adminname)
+    console.log("Expected value is not shown: ", actualresult_adminname)
   }
 
   // To check email is disabled or not and to compare the text which is populated 
   await expect(page1.getByPlaceholder('Enter email')).toBeDisabled();
   const email = page1.getByPlaceholder('Enter email');
   var actualresult_email = await email.getAttribute("value");
+
+  console.log("To check email is disabled or not and to compare the text which is populated", "\n")
+
   if (expectedresult_email === actualresult_email) {
-    console.log("Expected value of companyname is shown ", actualresult_email)
+    console.log("Expected value is shown: ", actualresult_email)
   }
   else {
-    console.log("Expected value of companyname is not shown ", actualresult_email)
+    console.log("Expected value is not shown: ", actualresult_email)
   }
 
   // To compare the text which is populated in the companyname
   await expect(page1.getByPlaceholder('Enter company name')).toBeEnabled();
   const companyname = page1.getByPlaceholder('Enter company name');
   var actualresult_companyname = await companyname.getAttribute("value");
+
+  console.log("To compare the text which is populated in the companyname", "\n")
+
   if (expectedresult_companyname === actualresult_companyname) {
-    console.log("Expected value of email is shown ", actualresult_companyname)
+    console.log("Expected value is shown: ", actualresult_companyname)
   }
   else {
-    console.log("Expected value of email is not shown ", actualresult_companyname)
+    console.log("Expected value is not shown: ", actualresult_companyname)
   }
 
   // To check the field validation while mandatory fields are not entered
-  await page1.getByPlaceholder('Enter trade name').click();//Not a mandatory field, field validations will not be shown
-  await page1.getByPlaceholder('Enter trade name').fill('');
-  await page1.getByPlaceholder('Enter employer id number').click();//Not a mandatory field, field validations will not be shown
-  await page1.getByPlaceholder('Enter employer id number').fill('');
-  await page1.getByPlaceholder('Enter password').click();
-  await page1.getByPlaceholder('Enter password').fill('');
-  await page1.getByPlaceholder('Enter confirm password').click();
-  await page1.getByPlaceholder('Enter confirm password').fill('');
   await page1.getByPlaceholder('Enter company name').click();
   await page1.getByPlaceholder('Enter company name').clear();
   await page1.getByRole('button', { name: 'Create account' }).click();
@@ -101,11 +108,14 @@ test('clientonboardingtest', async ({ page }) => {
   var actualresult_company_name = await company_name.textContent();
   var actualresult_password = await password.textContent();
   var actualresult_confirm_password = await confirm_password.textContent();
+
+  console.log("To check the field validation while mandatory fields are not entered", "\n")
+
   if (actualresult_company_name === expectedresult_company_name && expectedresult_password === actualresult_password && actualresult_confirm_password === expectedresult_confirm_password) {
-    console.log("Error messages for To check the field validation while mandatory fields are not entered scenario is shown: ", actualresult_company_name, ",", actualresult_password, ",", actualresult_confirm_password)
+    console.log("Error messages are shown: ", actualresult_company_name, ",", actualresult_password, ",", actualresult_confirm_password)
   }
   else {
-    console.log("Error messages for To check the field validation while mandatory fields are not entered scenario is not shown: ", actualresult_company_name, ",", actualresult_password, ",", actualresult_confirm_password)
+    console.log("Error messages are not shown: ", actualresult_company_name, ",", actualresult_password, ",", actualresult_confirm_password)
   }
 
   //To check field/error validations are shown while max character limit is exceeded
@@ -123,11 +133,14 @@ test('clientonboardingtest', async ({ page }) => {
   var actualresult_company_name1 = await company_name1.textContent();
   var actualresult_trade_name = await trade_name.textContent();
   var actualresult_employerid = await employerid.textContent();
+
+  console.log("To check field/error validations are shown while max character limit is exceeded", "\n")
+
   if (actualresult_company_name1 === expectedresult_company_name && expectedresult_password === actualresult_password && actualresult_confirm_password === expectedresult_confirm_password && actualresult_trade_name === expectedresult_trade_name && actualresult_employerid === expectedresult_employerid) {
-    console.log("Error messages for To check field/error validations are shown while max character limit is exceeded scenario is shown: ", actualresult_company_name1, ',', actualresult_trade_name, ',', actualresult_employerid)
+    console.log("Error messages are shown: ", actualresult_company_name1, ',', actualresult_trade_name, ',', actualresult_employerid)
   }
   else {
-    console.log("Error messages for To check field/error validations are shown while max character limit is exceeded scenario is not shown: ", actualresult_company_name1, ',', actualresult_trade_name, ',', actualresult_employerid)
+    console.log("Error messages are not shown: ", actualresult_company_name1, ',', actualresult_trade_name, ',', actualresult_employerid)
   }
 
   var companyname_text_length = await page1.getByPlaceholder('Enter company name').getAttribute("value");
@@ -156,18 +169,19 @@ test('clientonboardingtest', async ({ page }) => {
   const password1 = page1.locator('#root > div.App > div > div > div > form > div:nth-child(3) > div:nth-child(1) > div > div');
   const trade_name1 = page1.locator('#root > div.App > div > div > div > form > div:nth-child(2) > div:nth-child(2) > div > div');
   const employerid1 = page1.locator('#root > div.App > div > div > div > form > div:nth-child(2) > div:nth-child(3) > div > div');
-  
+
   var actualresult_company_name2 = await company_name2.textContent();
   var actualresult_password1 = await password1.textContent();
   var actualresult_trade_name1 = await trade_name1.textContent();
   var actualresult_employerid1 = await employerid1.textContent();
 
+  console.log("To check field/error validations are shown while min character limit is exceeded", "\n")
 
   if (actualresult_company_name2 === expectedresult_company_name1 && actualresult_password1 === expectedresult_password1 && actualresult_trade_name1 === expectedresult_trade_name && actualresult_employerid1 === expectedresult_employerid) {
-    console.log("Error messages for To check field/error validations are shown while min character limit is exceeded scenario is shown: ", actualresult_company_name2, ",", actualresult_password1, ',', actualresult_trade_name1, ',', actualresult_employerid1)
+    console.log("Error messages are shown: ", actualresult_company_name2, ",", actualresult_password1, ',', actualresult_trade_name1, ',', actualresult_employerid1)
   }
   else {
-    console.log("Error messages for To check field/error validations are shown while min character limit is exceeded scenario is not shown: ", actualresult_company_name2, ",", actualresult_password1, ',', actualresult_trade_name1, ',', actualresult_employerid1)
+    console.log("Error messages are not shown: ", actualresult_company_name2, ",", actualresult_password1, ',', actualresult_trade_name1, ',', actualresult_employerid1)
   }
   var companyname_text_length = await page1.getByPlaceholder('Enter company name').getAttribute("value");
 
@@ -195,18 +209,18 @@ test('clientonboardingtest', async ({ page }) => {
   const company_name3 = page1.locator('#root > div.App > div > div > div > form > div:nth-child(2) > div:nth-child(1) > div > div');
   const trade_name2 = page1.locator('#root > div.App > div > div > div > form > div:nth-child(2) > div:nth-child(2) > div > div');
   const employerid2 = page1.locator('#root > div.App > div > div > div > form > div:nth-child(2) > div:nth-child(3) > div > div');
-  
+
   var actualresult_company_name3 = await company_name3.textContent();
   var actualresult_trade_name2 = await trade_name2.textContent();
   var actualresult_employerid2 = await employerid2.textContent();
 
-
+  console.log("To check field/error validations are shown while unsupported character/number are entered", "\n")
 
   if (actualresult_company_name3 === expectedresult_company_name2 && actualresult_trade_name2 === expectedresult_trade_name2 && actualresult_employerid2 === expectedresult_employerid2) {
-    console.log("Error messages for To check field/error validations are shown while min character limit is exceeded scenario is shown: ", actualresult_company_name3, ",", actualresult_trade_name2, ',', actualresult_employerid2)
+    console.log("Error messages are shown: ", actualresult_company_name3, ",", actualresult_trade_name2, ',', actualresult_employerid2)
   }
   else {
-    console.log("Error messages for To check field/error validations are shown while min character limit is exceeded scenario is not shown: ", actualresult_company_name3, ",", actualresult_trade_name2, ',', actualresult_employerid2)
+    console.log("Error messages are not shown: ", actualresult_company_name3, ",", actualresult_trade_name2, ',', actualresult_employerid2)
   }
 
   //To check field/error validations are shown while valid password format is not entered in password and confirm password
@@ -271,12 +285,14 @@ test('clientonboardingtest', async ({ page }) => {
   var actualresult_password2 = await password2.textContent();
   var actualresult_confirm_password1 = await confirm_password1.textContent();
 
+  console.log("To check field/error validations are shown while valid password format is not entered in password and confirm password", "\n")
+
   if (actualresult_confirm_password1 === expectedresult_confirm_password1) {
-    console.log("Error messages for To check field/error validations are shown while valid password format is not entered in password and confirm password scenario is shown: ", actualresult_confirm_password1)
+    console.log("Error messages are shown: ", actualresult_confirm_password1)
 
   }
   else {
-    console.log("Error messages for To check field/error validations are shown while valid password format is not entered in password and confirm password scenario is not shown: ", actualresult_confirm_password1)
+    console.log("Error messages are not shown: ", actualresult_confirm_password1)
   }
 
   //To check field/error validations are shown while boundary values are entered in employer id no
@@ -285,14 +301,16 @@ test('clientonboardingtest', async ({ page }) => {
   await page1.getByRole('button', { name: 'Create account' }).click();
 
   const employerid3 = page1.locator('#root > div.App > div > div > div > form > div:nth-child(2) > div:nth-child(3) > div > div');
-  
+
   var actualresult_employerid3 = await employerid3.textContent();
 
+  console.log("To check field/error validations are shown while boundary values are entered in employer id no", "\n")
+
   if (expectedresult_employerid === actualresult_employerid3) {
-    console.log("Error messages for To check field/error validations are shown while boundary values are entered in employer id no scenario is shown: ", actualresult_employerid3)
+    console.log("Error messages are shown: ", actualresult_employerid3)
   }
   else {
-    console.log("Error messages for To check field/error validations are shown while boundary values are entered in employer id no scenario is not shown: ", actualresult_employerid3)
+    console.log("Error messages are not shown: ", actualresult_employerid3)
   }
 
   var employerid_text_length1 = await page1.getByPlaceholder('Enter employer id number').getAttribute("value");
@@ -303,14 +321,14 @@ test('clientonboardingtest', async ({ page }) => {
   await page1.getByRole('button', { name: 'Create account' }).click();
 
   const employerid4 = page1.locator('#root > div.App > div > div > div > form > div:nth-child(2) > div:nth-child(3) > div > div');
-  
+
   var actualresult_employerid3 = await employerid4.textContent();
 
   if (expectedresult_employerid === actualresult_employerid3) {
-    console.log("Error messages for To check field/error validations are shown while boundary values are entered in employer id no scenario is shown: ", actualresult_employerid3)
+    console.log("Error messages are shown: ", actualresult_employerid3)
   }
   else {
-    console.log("Error messages for To check field/error validations are shown while boundary values are entered in employer id no scenario is not shown: ", actualresult_employerid3)
+    console.log("Error messages are not shown: ", actualresult_employerid3)
   }
 
   var employerid_text_length2 = await page1.getByPlaceholder('Enter employer id number').getAttribute("value");
@@ -328,6 +346,40 @@ test('clientonboardingtest', async ({ page }) => {
   await page1.getByPlaceholder('Enter company name').click();
   await page1.getByPlaceholder('Enter company name').fill(expectedresult_companyname);
   await page1.getByRole('button', { name: 'Create account' }).click();
-  
+
+  // To check the field validation while mandatory fields are not entered
+  await page.getByRole('button', { name: 'Save & Continue' }).click();
+  const street1 = page1.locator('#react-aria249683679-1-tabpane-add_address > div > form > div:nth-child(1) > div:nth-child(1) > div > div');
+  var actualresult_street1 = await street1.textContent();
+  if (actualresult_street1 === expectedresult_street1) {
+    console.log()
+  }
+
+
+
+  await page.getByRole('textbox', { name: 'Street 1' }).click();
+  await page.getByRole('textbox', { name: 'Street 1' }).fill('          ');
+  await page.getByLabel('City').fill('             ');
+  await page.getByLabel('City').click();
+  await page.getByLabel('City').fill('               ');
+  await page.getByLabel('City').click();
+  await page.getByLabel('City').fill('                ');
+  await page.locator('.css-ackcql').first().click();
+  await page.getByText('KS', { exact: true }).click();
+  await page.getByLabel('Zip Code').click();
+  await page.getByLabel('Zip Code').fill('34567');
+  await page.getByLabel('Phone number').click();
+  await page.getByLabel('Phone number').fill('5678909677');
+  await page.getByLabel('Select address type(s)').uncheck();
+  await page.locator('input[name="filing_address"]').uncheck();
+  await page.getByLabel('Select address type(s)').check();
+  await page.locator('input[name="filing_address"]').check();
+  await page.getByRole('button', { name: 'Save & Continue' }).click();
+  await page.getByRole('button', { name: 'Save & Continue' }).click();
+  await page.getByRole('tabpanel', { name: 'Add addresses' }).locator('div').filter({ hasText: 'We will need to collect and add any employee’s physical working address in the U' }).nth(2).click({
+    button: 'right'
+  });
+  await page.getByRole('button', { name: 'Save & Continue' }).click();
+
 
 })
