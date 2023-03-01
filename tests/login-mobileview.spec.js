@@ -11,7 +11,7 @@ test('test', async ({ page }) => {
   //To open the guhroo login page
   await page.goto('https://qa.cloud.guhroo.co/login');
 
-  //Enter these four fields
+  //Enter these two values
   var password_value = "Password@577";
   var existing_password_value = "Password@576";
 
