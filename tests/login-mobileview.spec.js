@@ -12,8 +12,8 @@ test('test', async ({ page }) => {
   await page.goto('https://qa.cloud.guhroo.co/login');
 
   //Enter these two values
-  var password_value = "Password@577";
-  var existing_password_value = "Password@576";
+  var password_value = "Pass@124";
+  var existing_password_value = "Pass@123";
 
   //Sign in page
   var expectedresult_username = 'Please enter your username to proceed.';//Logging in without giving an username and password
